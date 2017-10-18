@@ -1,8 +1,9 @@
-FROM alpine:3.5
+FROM golang:1.8
 
-RUN apk add --no-cache --update \
-      ca-certificates
+WORKDIR /go/src/app
+COPY . /go/src/app
 
-COPY bin/aws-sign-proxy /aws-sign-proxy
+RUN make deps && make
+RUN cp /go/src/app/bin/aws-sign-proxy /usr/bin
 
-CMD ["/aws-sign-proxy"]
+CMD ["aws-sign-proxy"]
